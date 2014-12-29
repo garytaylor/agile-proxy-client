@@ -1,0 +1,24 @@
+{
+  "name": "agile-proxy-client",
+  "version": "0.0.1",
+  "description": "Javascript client (browser based) for agile-proxy server",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "bower install"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "jasmine-core": "^2.1.3",
+    "karma": "^0.12.28",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-jasmine": "^0.3.3",
+    "karma-requirejs": "^0.2.2",
+    "requirejs": "^2.1.15"
+  }
+}

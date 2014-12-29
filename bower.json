@@ -1,0 +1,39 @@
+{
+  "name": "agile-proxy-client",
+  "version": "0.0.1",
+  "authors": [
+    "Gary Taylor <gary.taylor@hismessages.com>"
+  ],
+  "description": "Client side heler for the agile-proxy server (https://github.com/garytaylor/agileproxy.git)",
+  "main": "src/proxy.js",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "agile",
+    "proxy",
+    "client",
+    "rest",
+    "selenium",
+    "test",
+    "cucumber",
+    "integration",
+    "suite"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/garytaylor/agileproxy.git",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "sinonjs": "~1.10.2"
+  },
+  "dependencies": {
+    "underscore": "~1.7.0",
+    "string": "~3.0.0"
+  }
+}
