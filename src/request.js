@@ -1,4 +1,4 @@
-define(function (require) {
+function factory(require) {
 
     'use strict';
     var _ = require('underscore');
@@ -13,12 +13,13 @@ define(function (require) {
         return [result, req];
     };
 
-    var xhr = function (type, url, data, headers) {
+    var xhr = function (type, url, data, cb) {
+        var headers;
         var methods = {
             success: function () {},
             error: function () {}
         };
-        headers = headers || {};
+        headers = {};
         if (_.isObject(data)) {
             if (data.hasOwnProperty('json')){
                 data = JSON.stringify(data.json);
@@ -36,9 +37,9 @@ define(function (require) {
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.status === 200) {
-                    methods.success.apply(methods, parse(request));
+                    cb.apply(this, [null, {}, parse(request)]);
                 } else {
-                    methods.error.apply(methods, parse(request));
+                    cb.apply(this, [true, {}, parse(request)]);
                 }
             }
         };
@@ -55,22 +56,27 @@ define(function (require) {
         };
     };
 
-    exports['get'] = function (src) {
-        return xhr('GET', src);
+    exports['get'] = function (src, cb) {
+        return xhr('GET', src, null, cb);
     };
 
-    exports['put'] = function (url, data) {
-        return xhr('PUT', url, data);
+    exports['put'] = function (url, data, cb) {
+        return xhr('PUT', url, data, cb);
     };
 
-    exports['post'] = function (url, data) {
-        return xhr('POST', url, data);
+    exports['post'] = function (url, data, cb) {
+        return xhr('POST', url, data, cb);
     };
 
-    exports['delete'] = function (url) {
-        return xhr('DELETE', url);
+    exports['delete'] = function (url, cb) {
+        return xhr('DELETE', url, null, cb);
     };
 
     return exports;
 
-});
+}
+if (typeof module !== 'undefined' && module.exports) {
+    factory(require, exports, module);
+} else {
+    define(factory);
+}

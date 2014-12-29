@@ -1,10 +1,15 @@
+var isNode = false;
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+    isNode = true;
+}
 define(function (require, exports, module) {
     var _, Response, request;
     _ = require('underscore');
     Response = require('./Response');
-    request = require('./request');
+    request = require('request');
     function RequestSpec(attrs) {
-        _.extend(this, attrs);
+        _.extend(this, {method: 'GET'}, attrs);
     }
     _.extend(RequestSpec, {
         removeAll: function (url, callback) {

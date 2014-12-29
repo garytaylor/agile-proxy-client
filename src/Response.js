@@ -1,4 +1,4 @@
-define(function (require, exports, module) {
+function factory(require, exports, module) {
     var _, S;
     _ = require('underscore');
     S = require('string');
@@ -62,4 +62,10 @@ define(function (require, exports, module) {
         }
     });
     module.exports = Response;
-});
+
+}
+if (typeof module !== 'undefined' && module.exports) {
+    factory(require, exports, module);
+} else {
+    define(factory);
+}

@@ -22,7 +22,8 @@ require.config({
   paths: {
     'sinon': 'bower_components/sinonjs/sinon',
     'underscore': 'bower_components/underscore/underscore',
-    'string': 'bower_components/string/lib/string'
+    'string': 'bower_components/string/lib/string',
+    'request': 'src/request'
   },
   shim: {
     'sinon': {

@@ -17,8 +17,9 @@ module.exports = function(config) {
     files: [
       'test-main.js',
       {pattern: 'src/**/*.js', included: false},
-      {pattern: 'test/**/*Spec.js', included: false},
-      {pattern: 'test/**/*SpecHelper.js', included: false},
+      {pattern: 'spec/support/**/*.js', included: false},
+      {pattern: 'spec/**/*Spec.js', included: false},
+      {pattern: 'spec/**/*SpecHelper.js', included: false},
       {pattern: 'bower_components/sinonjs/**/*.js', included: false},
       {pattern: 'bower_components/sinon_server/**/*.js', included: false},
       {pattern: 'bower_components/underscore/**/*.js', included: false},

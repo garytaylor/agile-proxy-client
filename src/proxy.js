@@ -1,4 +1,4 @@
-define(function (require, exports, module) {
+function factory(require, exports, module) {
     var _, RequestSpec;
     _ = require('underscore');
     RequestSpec = require('./RequestSpec');
@@ -91,4 +91,9 @@ define(function (require, exports, module) {
     });
     module.exports = Proxy;
 
-});
+}
+if (typeof module !== 'undefined' && module.exports) {
+    factory(require, exports, module);
+} else {
+    define(factory);
+}
