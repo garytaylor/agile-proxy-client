@@ -1,4 +1,7 @@
-function factory(require) {
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
+define(function(require) {
 
     'use strict';
     var _ = require('underscore');
@@ -74,9 +77,4 @@ function factory(require) {
 
     return exports;
 
-}
-if (typeof module !== 'undefined' && module.exports) {
-    factory(require, exports, module);
-} else {
-    define(factory);
-}
+});

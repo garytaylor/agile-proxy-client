@@ -1,4 +1,7 @@
-function factory(require, exports, module) {
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
+define(function (require, exports, module) {
     var _, RequestSpec;
     _ = require('underscore');
     RequestSpec = require('./RequestSpec');
@@ -90,10 +93,9 @@ function factory(require, exports, module) {
 
     });
     module.exports = Proxy;
-
-}
-if (typeof module !== 'undefined' && module.exports) {
-    factory(require, exports, module);
-} else {
-    define(factory);
-}
+    if (typeof window !== 'undefined') {
+        window.AgileProxy = {
+            Proxy: Proxy
+        };
+    }
+});

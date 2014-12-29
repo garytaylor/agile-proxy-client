@@ -30,7 +30,8 @@
     "tests"
   ],
   "devDependencies": {
-    "sinonjs": "~1.10.2"
+    "sinonjs": "~1.10.2",
+    "almond": "~0.3.0"
   },
   "dependencies": {
     "underscore": "~1.7.0",
