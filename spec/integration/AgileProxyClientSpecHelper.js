@@ -1,84 +1,79 @@
-var isNode;
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-    isNode = true;
-}
-define(['require', '../support/fakeServer', 'underscore'], function (require, sinon, _) {
-    var callTracker, host;
-    callTracker = {};
-    return {
-        setupFakeServer: function (options) {
-            options = options || {};
-            options.port = options.port || 4000;
-            host = 'http://localhost:' + options.port;
-            if (sinon) {
-                this.server = sinon.fakeServer.create();
-            }
-            callTracker = {};
-        },
-        teardownFakeServer: function () {
-            if (sinon) {
-                this.server.restore();
-            }
-        },
-        stubRequest: function (method, urlOrRegex) {
-            var url, me, response, nock;
-            me = this;
-            if (_.isRegExp(urlOrRegex)) {
+var callTracker, host, sinon, _;
+callTracker = {};
+_ = require('underscore');
+sinon = require('../support/fakeServer');
+module.exports = {
+    setupFakeServer: function (options) {
+        options = options || {};
+        options.port = options.port || 4000;
+        host = 'http://localhost:' + options.port;
+        if (sinon) {
+            this.server = sinon.fakeServer.create();
+        }
+        callTracker = {};
+    },
+    teardownFakeServer: function () {
+        if (sinon) {
+            this.server.restore();
+        }
+    },
+    stubRequest: function (method, urlOrRegex) {
+        var url, me, response, nock;
+        me = this;
+        if (_.isRegExp(urlOrRegex)) {
+            url = urlOrRegex;
+        } else if (_.isString(urlOrRegex)) {
+            if (urlOrRegex.match(/^http/)) {
                 url = urlOrRegex;
-            } else if (_.isString(urlOrRegex)) {
-                if (urlOrRegex.match(/^http/)) {
-                    url = urlOrRegex;
-                } else {
-                    url = host + urlOrRegex;
-                }
             } else {
-                url = urlOrRegex;
+                url = host + urlOrRegex;
             }
-            this.setupCallFor(method, urlOrRegex);
-            if (sinon) {
-                this.server.respondWith(method, url, function (request) {
-                    if (!request.requestHeaders['Content-Type'].match(/application\/json/)) {
-                        request.respond(404, {}, 'Not Found');
-                        return true;
-                    }
-                    response = me.getStubbedRequest(method, urlOrRegex).fn(method, {url: request.url, body: request.requestBody}) || {body: ''};
-                    request.respond(response.status || 200, response.headers || {}, response.body);
+        } else {
+            url = urlOrRegex;
+        }
+        this.setupCallFor(method, urlOrRegex);
+        if (sinon) {
+            this.server.respondWith(method, url, function (request) {
+                if (!request.requestHeaders['Content-Type'].match(/application\/json/)) {
+                    request.respond(404, {}, 'Not Found');
                     return true;
-                });
-            } else {
-                nock = require('nock');
-                nock(host, {reqheaders: {'Content-Type': 'application/json'}}).persist()[method.toLowerCase()](urlOrRegex).reply(200, function (uri, requestBody) {
-                    response = me.getStubbedRequest(method, urlOrRegex).fn(method, {url: host +uri, body: requestBody}) || {body: ''};
-                    return response.body;
-
-                });
-            }
-
-        },
-        getStubbedRequest: function(method, urlOrRegex) {
-            if (!callTracker.hasOwnProperty(method) || !callTracker[method][urlOrRegex]) {
-                throw new Error('No request has been stubbed for "' + method + '" : "' + urlOrRegex + '"');
-            }
-            return callTracker[method][urlOrRegex];
-        },
-        sendServerResponse: function () {
-            if (sinon) {
-                this.server.respond();
-            }
-        },
-        setupCallFor: function (method, urlOrRegex) {
-            callTracker[method] = callTracker[method] || {};
-            callTracker[method][urlOrRegex] = callTracker[method][urlOrRegex] || {fn: function () {}};
-        },
-        getCreatedStub: function () {
-            return {
-                mock_request: {
-                    id: '10',
-                    url: ''
                 }
-            };
+                response = me.getStubbedRequest(method, urlOrRegex).fn(method, {url: request.url, body: request.requestBody}) || {body: ''};
+                request.respond(response.status || 200, response.headers || {}, response.body);
+                return true;
+            });
+        } else {
+            nock = require('nock');
+            nock(host, {reqheaders: {'Content-Type': 'application/json'}}).persist()[method.toLowerCase()](urlOrRegex).reply(200, function (uri, requestBody) {
+                response = me.getStubbedRequest(method, urlOrRegex).fn(method, {url: host +uri, body: requestBody}) || {body: ''};
+                return response.body;
+
+            });
         }
 
-    };
-});
+    },
+    getStubbedRequest: function(method, urlOrRegex) {
+        if (!callTracker.hasOwnProperty(method) || !callTracker[method][urlOrRegex]) {
+            throw new Error('No request has been stubbed for "' + method + '" : "' + urlOrRegex + '"');
+        }
+        return callTracker[method][urlOrRegex];
+    },
+    sendServerResponse: function () {
+        if (sinon) {
+            this.server.respond();
+        }
+    },
+    setupCallFor: function (method, urlOrRegex) {
+        callTracker[method] = callTracker[method] || {};
+        callTracker[method][urlOrRegex] = callTracker[method][urlOrRegex] || {fn: function () {}};
+    },
+    getCreatedStub: function () {
+        return {
+            mock_request: {
+                id: '10',
+                url: ''
+            }
+        };
+    }
+
+};
