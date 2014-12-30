@@ -23,11 +23,15 @@ require.config({
     'sinon': 'bower_components/sinonjs/sinon',
     'underscore': 'bower_components/underscore/underscore',
     'string': 'bower_components/string/lib/string',
-    'request': 'src/request'
+    'request': 'src/request',
+    'AgileProxy': 'dist/AgileProxy'
   },
   shim: {
     'sinon': {
       exports: 'sinon'
+    },
+    'AgileProxy': {
+      exports: 'AgileProxy'
     }
   },
 

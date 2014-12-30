@@ -8,7 +8,7 @@ define(function (require) {
     describe('AgileProxyClient', function () {
         beforeEach(function () {
             restPort = 4000;
-            proxy = new (require('../../src/proxy'))();
+            proxy = new (require('../../src/AgileProxy').Proxy)();
             helper = require('./AgileProxyClientSpecHelper');
             collectionUrl = 'http://localhost:' + restPort + '/v1/users/1/applications/1/request_specs';
         });

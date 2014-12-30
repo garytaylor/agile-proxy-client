@@ -11,7 +11,7 @@ module.exports = function(grunt) {
                     modules: [
                         {
                             name: "almond",
-                            include: ["src/proxy"]
+                            include: ["src/AgileProxy"]
                         }
                     ],
                     removeCombined: true,
@@ -31,6 +31,9 @@ module.exports = function(grunt) {
                     optimize: 'none',
                     skipDirOptimize: true,
                     done: function(done, output) {
+                        shell.rm('dist/AgileProxy.js');
+                        shell.cp('build/bower_components/almond/almond.js', 'dist/AgileProxy.js');
+                        shell.rm('-rf', 'build');
                         grunt.log.success("No duplicates found!");
                         done();
                     }

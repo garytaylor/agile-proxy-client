@@ -1,5 +1,7 @@
+var isNode;
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
+    isNode = true;
 }
 define(function (require, exports, module) {
     var _, RequestSpec;
@@ -93,9 +95,4 @@ define(function (require, exports, module) {
 
     });
     module.exports = Proxy;
-    if (typeof window !== 'undefined') {
-        window.AgileProxy = {
-            Proxy: Proxy
-        };
-    }
 });

@@ -23,7 +23,8 @@ module.exports = function(config) {
       {pattern: 'bower_components/sinonjs/**/*.js', included: false},
       {pattern: 'bower_components/sinon_server/**/*.js', included: false},
       {pattern: 'bower_components/underscore/**/*.js', included: false},
-      {pattern: 'bower_components/string/**/*.js', included: false}
+      {pattern: 'bower_components/string/**/*.js', included: false},
+      {pattern: 'dist/**/*.js', included: false}
     ],
 
 
