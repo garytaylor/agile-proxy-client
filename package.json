@@ -9,11 +9,12 @@
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt buildAndTest",
     "build": " ./node_modules/grunt-cli/bin/grunt browserify:production",
-    "install": "bower install"
+    "install": "./node_modules/bower/bin/bower install"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "bower": "^1.3.12",
     "browser-request": "git+https://github.com/garytaylor/browser-request-1.git",
     "grunt": "^0.4.5",
     "grunt-browserify": "^3.2.1",
