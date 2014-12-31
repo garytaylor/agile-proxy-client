@@ -26,7 +26,7 @@ _.extend(RequestSpec.prototype, {
     },
     done: function (url, callback) {
         var obj;
-        request.post(url, {json: this.asJson()}, function (err, response, body) {
+        request.post({url: url, json: this.asJson()}, function (err, response, body) {
             var obj;
             if (!err) {
                 //When the content type is application/json, the request module automatically decodes the json

@@ -1,19 +1,18 @@
-var callTracker, host, sinon, _;
+var callTracker, host, _;
 callTracker = {};
 _ = require('underscore');
-sinon = require('../support/fakeServer');
 module.exports = {
     setupFakeServer: function (options) {
         options = options || {};
         options.port = options.port || 4000;
         host = 'http://localhost:' + options.port;
-        if (sinon) {
+        if (typeof sinon !== 'undefined') {
             this.server = sinon.fakeServer.create();
         }
         callTracker = {};
     },
     teardownFakeServer: function () {
-        if (sinon) {
+        if (typeof sinon !== 'undefined') {
             this.server.restore();
         }
     },
@@ -32,7 +31,7 @@ module.exports = {
             url = urlOrRegex;
         }
         this.setupCallFor(method, urlOrRegex);
-        if (sinon) {
+        if (typeof sinon !== 'undefined') {
             this.server.respondWith(method, url, function (request) {
                 if (!request.requestHeaders['Content-Type'].match(/application\/json/)) {
                     request.respond(404, {}, 'Not Found');
@@ -59,7 +58,7 @@ module.exports = {
         return callTracker[method][urlOrRegex];
     },
     sendServerResponse: function () {
-        if (sinon) {
+        if (typeof sinon !== 'undefined') {
             this.server.respond();
         }
     },

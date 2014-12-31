@@ -2,50 +2,58 @@ module.exports = function(grunt) {
     var shell;
     shell = require('shelljs');
     grunt.initConfig({
-        requirejs: {
-            compile: {
-                options: {
-                    appDir: "./",
-                    baseUrl: "./",
-                    dir: "build",
-                    modules: [
-                        {
-                            name: "almond",
-                            include: ["src/AgileProxy"]
-                        }
-                    ],
-                    removeCombined: true,
-                    fileExclusionRegExp: /^node_modules|^\.|^spec|^build\.txt|^karma|^package\.json|^test\-main\.js/,
-                    paths: {
-                        'sinon': 'bower_components/sinonjs/sinon',
-                        'underscore': 'bower_components/underscore/underscore',
-                        'string': 'bower_components/string/lib/string',
-                        'request': 'src/request',
-                        'almond': 'bower_components/almond/almond'
-                    },
-                    shim: {
-                        'sinon': {
-                            exports: 'sinon'
-                        }
-                    },
-                    optimize: 'none',
-                    skipDirOptimize: true,
-                    done: function(done, output) {
-                        shell.rm('dist/AgileProxy.js');
-                        shell.cp('build/bower_components/almond/almond.js', 'dist/AgileProxy.js');
-                        shell.rm('-rf', 'build');
-                        grunt.log.success("No duplicates found!");
-                        done();
-                    }
+        browserify: {
+            options: {
+                browserifyOptions: {
+                    standalone: 'AgileProxy'
                 }
+            },
+            production: {
+                dest: 'dist/AgileProxy.js',
+                src: 'src/AgileProxy.js'
+            }
+        },
+        karma: {
+            development: {
+                configFile: 'karma.conf.js',
+                files: [
+                    {pattern: 'bower_components/sinonjs/**/*.js'},
+                    {pattern: 'bower_components/underscore/**/*.js', included: false},
+                    {pattern: 'bower_components/string/**/*.js', included: false},
+                    {pattern: 'spec/support/**/*.js'},
+                    {pattern: 'spec/**/*Spec.js'},
+                    {pattern: 'spec/**/*SpecHelper.js'}
+                ],
+                singleRun: true
+            },
+            production: {
+                configFile: 'karma.conf.js',
+                files: [
+                    {pattern: 'bower_components/sinonjs/**/*.js'},
+                    {pattern: 'bower_components/underscore/**/*.js', included: false},
+                    {pattern: 'bower_components/string/**/*.js', included: false},
+                    {pattern: 'dist/AgileProxy.js', included: true},
+                    {pattern: 'spec/support/**/*.js'},
+                    {pattern: 'spec/**/*Spec.js'},
+                    {pattern: 'spec/**/*SpecHelper.js'}
+                ],
+                singleRun: true,
+                browsers: ['PhantomJS'],
+                browserify: {
+                    configure: function (bundle) {
+                        bundle.on('prebundle', function () {
+                            bundle.ignore('nock');
+                            bundle.ignore('sinon');
+                            bundle.external('src/AgileProxy.js');  //Prevents the source code from being used during this test
+                        });
+                    },
+                    debug: true
+                }
+
             }
         }
 
     });
-
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.registerTask('build:copyToDist', 'Build all', function () {
-        shell.mkdir('dist');
-        shell.cp('build/src/proxy.js', 'dist/');
-    });
+    grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-karma');
 };

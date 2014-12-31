@@ -10,21 +10,19 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'requirejs'],
+    frameworks: ['browserify', 'jasmine'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'test-main.js',
-      {pattern: 'src/**/*.js', included: false},
-      {pattern: 'spec/support/**/*.js', included: false},
-      {pattern: 'spec/**/*Spec.js', included: false},
-      {pattern: 'spec/**/*SpecHelper.js', included: false},
-      {pattern: 'bower_components/sinonjs/**/*.js', included: false},
-      {pattern: 'bower_components/sinon_server/**/*.js', included: false},
+      {pattern: 'bower_components/sinonjs/**/*.js'},
+      {pattern: 'bower_components/sinon_server/**/*.js'},
       {pattern: 'bower_components/underscore/**/*.js', included: false},
       {pattern: 'bower_components/string/**/*.js', included: false},
-      {pattern: 'dist/**/*.js', included: false}
+      {pattern: 'dist/AgileProxy.js', included: true},
+      {pattern: 'spec/support/**/*.js'},
+      {pattern: 'spec/**/*Spec.js'},
+      {pattern: 'spec/**/*SpecHelper.js'}
     ],
 
 
@@ -36,6 +34,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'spec/**/*.js': ['browserify']
     },
 
 
@@ -69,6 +68,15 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false
+    singleRun: false,
+    browserify: {
+      configure: function (bundle) {
+        bundle.on('prebundle', function () {
+          bundle.ignore('nock');
+          bundle.ignore('sinon');
+        });
+      },
+      debug: true
+    }
   });
 };

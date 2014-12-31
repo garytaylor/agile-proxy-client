@@ -2,7 +2,11 @@ var _, proxy, restPort, spec1Request, spec2Request, freeport, helper, collection
 describe('AgileProxyClient', function () {
     beforeEach(function () {
         restPort = 4000;
-        proxy = new (require('../../src/AgileProxy').Proxy)();
+        if (typeof AgileProxy === 'undefined') {
+            proxy = new (require('../../src/AgileProxy').Proxy)();
+        } else {
+            proxy = new AgileProxy.Proxy();
+        }
         helper = require('./AgileProxyClientSpecHelper');
         collectionUrl = 'http://localhost:' + restPort + '/v1/users/1/applications/1/request_specs';
     });
@@ -112,7 +116,7 @@ describe('AgileProxyClient', function () {
                     });
                 });
                 describe('Defaults', function () {
-                    it('Should set the http_method to "GET" if not specified', function () {
+                    it('Should set the http_method to "GET" if not specified', function (done) {
                         proxy.define(function (p) {
                             p.stub('http://www.google.com').andReturn({text: 'Hello World'});
                         }, function () {
