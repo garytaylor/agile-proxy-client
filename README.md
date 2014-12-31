@@ -37,3 +37,8 @@ The code below uses jasmine, but this could be just as easily applied to others.
   });
 
 ```
+
+## History
+0.0.1 - Initial release to github
+0.0.2 - Integrated travis
+0.0.3 - Released to npm and bower
