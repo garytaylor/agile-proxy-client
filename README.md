@@ -1,6 +1,8 @@
 Agile Proxy Client
 ==================
 
+[![Build Status](https://travis-ci.org/garytaylor/agile-proxy-client.svg?branch=master)](https://travis-ci.org/garytaylor/agile-proxy-client)
+
 A browser or nodejs based client to access an agile-proxy (https://github.com/garytaylor/agileproxy) server in tests etc..
 
 ## Overview
