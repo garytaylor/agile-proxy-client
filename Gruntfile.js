@@ -56,4 +56,12 @@ module.exports = function(grunt) {
     });
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.registerTask('jasmine:production', 'Run the jasmine suite for the nodejs code', function () {
+        shell.exec('./node_modules/jasmine/bin/jasmine.js');
+    });
+    grunt.registerTask('buildAndTest', 'Build the browser version and test browser and node versions', [
+        'browserify:production',
+        'karma:production',
+        'jasmine:production'
+    ]);
 };
