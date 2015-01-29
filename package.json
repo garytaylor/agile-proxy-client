@@ -1,15 +1,14 @@
 {
   "name": "agile-proxy-client",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Javascript client (browser based) for agile-proxy server",
-  "main": "index.js",
+  "main": "src/AgileProxy.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt buildAndTest",
-    "build": " ./node_modules/grunt-cli/bin/grunt browserify:production",
-    "install": "./node_modules/bower/bin/bower install"
+    "build": " ./node_modules/grunt-cli/bin/grunt browserify:production"
   },
   "author": "",
   "license": "ISC",
