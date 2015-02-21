@@ -44,3 +44,4 @@ The code below uses jasmine, but this could be just as easily applied to others.
 0.0.1 - Initial release to github
 0.0.2 - Integrated travis
 0.0.3 - Released to npm and bower
+0.0.6 - Added support for recordings api via the stub

@@ -22,7 +22,11 @@ _.extend(Proxy.prototype, {
      * on the request spec, or for a simpler way of defining multiple stubs with a single callback, see {@link #define}
      */
     stub: function (url, options) {
-        return new RequestSpec(_.extend({url: url}, options));
+        var r, config;
+        config = this.getConfig();
+        r = new RequestSpec(_.extend({url: url}, options));
+        r.setRestUrl(config.restUrl + '/' + config.apiVersion + '/users/' + config.userId + '/applications/' + config.applicationId + '/request_specs');
+        return r;
     },
     config: function (configObj) {
         _.extend(this._config, configObj);
@@ -42,7 +46,7 @@ _.extend(Proxy.prototype, {
      * @param {Object} scope The scope of the callback
      */
     define: function (defsOrFn, callback, scope) {
-        var callbacksCalled, restUrl, config, collectedSpecs;
+        var callbacksCalled, collectedSpecs;
         function privateCallback (error, response) {
             if (error) {
                 callback.apply(scope || this, [error]);
@@ -63,8 +67,6 @@ _.extend(Proxy.prototype, {
                 }
             };
         }
-        config = this.getConfig();
-        restUrl = config.restUrl + '/' + config.apiVersion + '/users/' + config.userId + '/applications/' + config.applicationId + '/request_specs';
         if (_.isFunction(defsOrFn)) {
             collectedSpecs = [];
             defsOrFn.apply(this, [generateProxy(this)]);
@@ -73,7 +75,7 @@ _.extend(Proxy.prototype, {
         if (defsOrFn instanceof Array) {
             callbacksCalled = defsOrFn.length;
             _.each(defsOrFn, function (def) {
-                def.done(restUrl, privateCallback, this);
+                def.done(privateCallback, this);
             });
         }
 

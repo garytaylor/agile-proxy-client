@@ -1,9 +1,11 @@
-var _, Response, request;
+var _, Response, request, Recording;
 _ = require('underscore');
 Response = require('./Response');
+Recording = require('./Recording');
 request = require('request');
 function RequestSpec(attrs) {
     _.extend(this, {method: 'GET'}, attrs);
+    this._data = {};
 }
 _.extend(RequestSpec, {
     removeAll: function (url, callback) {
@@ -24,8 +26,16 @@ _.extend(RequestSpec.prototype, {
     asJson: function () {
         return {url: this.url, http_method: this.method, conditions: JSON.stringify(this.conditions), response: this.response.asJson()};
     },
-    done: function (url, callback) {
-        var obj;
+    setRestUrl: function (value) {
+        this._restUrl = value;
+    },
+    getRestUrl: function () {
+        return this._restUrl;
+    },
+    done: function (callback) {
+        var obj, me, url;
+        me = this;
+        url = this.getRestUrl();
         request.post({url: url, json: this.asJson()}, function (err, response, body) {
             var obj;
             if (!err) {
@@ -35,12 +45,21 @@ _.extend(RequestSpec.prototype, {
                 } else {
                     obj = body;
                 }
-
+                me._data = obj;
                 callback.apply(this, [null, obj.mock_request]);
             } else {
                 callback.apply(this, [err, '']);
             }
         });
+    },
+    getId: function () {
+        return this._data.id;
+    },
+    getRecordings: function (cb) {
+        if (!this.getId()) {
+            throw new Error('This request spec has not been saved yet');
+        }
+        Recording.all({restUrl: this.getRestUrl() + '/' + this.getId() + '/recordings'}, cb);
     }
 
 });

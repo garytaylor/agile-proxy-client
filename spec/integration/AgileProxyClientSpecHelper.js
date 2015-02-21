@@ -3,11 +3,17 @@ callTracker = {};
 _ = require('underscore');
 module.exports = {
     setupFakeServer: function (options) {
+        var nock;
         options = options || {};
         options.port = options.port || 4000;
         host = 'http://localhost:' + options.port;
         if (typeof sinon !== 'undefined') {
             this.server = sinon.fakeServer.create();
+            this.server.autoRespond = true;
+            this.server.autoRespondAfter = 10;
+        } else {
+            nock = require('nock');
+            nock.cleanAll();
         }
         callTracker = {};
     },
@@ -49,6 +55,7 @@ module.exports = {
 
             });
         }
+        return this.getStubbedRequest(method, urlOrRegex);
 
     },
     getStubbedRequest: function(method, urlOrRegex) {
@@ -68,11 +75,17 @@ module.exports = {
     },
     getCreatedStub: function () {
         return {
-            mock_request: {
-                id: '10',
-                url: ''
-            }
+            id: '10',
+            url: ''
         };
+    },
+    getCreatedStubRecordings: function () {
+        return {
+            recordings: [
+                {request_url: 'http://www.google.com', request_method: 'GET'},
+                {request_url: 'http://www.google.com', request_method: 'GET'}
+            ]
+        }
     }
 
 };
