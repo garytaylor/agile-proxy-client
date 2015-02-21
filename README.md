@@ -45,3 +45,4 @@ The code below uses jasmine, but this could be just as easily applied to others.
 0.0.2 - Integrated travis
 0.0.3 - Released to npm and bower
 0.0.6 - Added support for recordings api via the stub
+0.0.7 - Added support for 'recordRequests' in stub definition

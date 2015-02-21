@@ -54,6 +54,17 @@ describe('AgileProxyClient', function () {
                     });
                     helper.sendServerResponse();
                 });
+                describe('Using recordRequests set to true', function () {
+                    it('Should set the record_requests attribute to true in the json', function (done) {
+                        proxy.define(function (p) {
+                            p.stub('http://www.google.com', {method: 'GET', recordRequests: true}).andReturn({html: '<html></html>'});
+                        }, function () {
+                            expect(stub.fn).toHaveBeenCalledWith('POST', correctRequest);
+                            expect(JSON.parse(stub.fn.calls.argsFor(0)[1].body)).toEqual(jasmine.objectContaining({url: 'http://www.google.com', record_requests: true, http_method: 'GET', response: {content_type: 'text/html', content: '<html></html>'}}));
+                            done();
+                        });
+                    });
+                });
                 describe('Using different content', function () {
                     it('Should set the content type to text/html if the response html property is set', function (done) {
                         proxy.define(function (p) {
